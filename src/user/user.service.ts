@@ -11,8 +11,7 @@ export class UserService {
     constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
     async createUser(userDto: UserDto): Promise<User> {
-        const user = await (new this.userModel(userDto).save())
-        return user
+        return await (new this.userModel(userDto).save())
     }
 
     async updateUser(userId: string, updateUserDto: UpdateUserDto): Promise<User> {
@@ -54,5 +53,35 @@ export class UserService {
         }
 
         return user
+    }
+
+    async getUsersByName(name: string): Promise<User[]> {
+        const users  = await this.userModel.find({'name': name})
+
+        if(!users){
+           throw new NotFoundException('No user with the name')
+        }
+
+        return users
+    }
+
+    async sortUsersByAlphbeticalOrder(): Promise<User[]> {
+        // sorting users using the name property by alphabetical order
+        // when sorting passing 1 means ascending and -1 means decending.
+        const users = await this.userModel.find().sort({name: 1})
+        if(!users){
+            throw new NotFoundException('No users in data.')
+        }
+
+        return users
+    }
+
+    async limitUserData(limit: number): Promise<User[]> {
+        const users = this.userModel.find().limit(limit)
+        if(!users){
+            throw new NotFoundException('No users in data.')
+        }
+
+        return users
     }
 }

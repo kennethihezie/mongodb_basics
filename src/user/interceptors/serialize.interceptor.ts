@@ -1,11 +1,6 @@
 import { CallHandler, ExecutionContext, NestInterceptor, UseInterceptors } from "@nestjs/common"
 import { Observable, map } from "rxjs"
 
-//basically it takes a class as an argument
-interface ClassConstrutor {
-    new (...args: any[]): {}
-}
-
 export function Serialize(){
     return UseInterceptors(new SerializeInterceptor())
 }

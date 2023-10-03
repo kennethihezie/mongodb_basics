@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, Query, Res } from '@nestjs/common';
 import { UserDto } from './model/dto/user.dto';
 import { UserService } from './user.service';
 import { Response } from 'express';
@@ -10,24 +10,26 @@ export class UserController {
     constructor(private userService: UserService) {}
 
     @Post()
-    async createUser(@Res() response: Response,  @Body() userDto: UserDto){
-        try {
-            const user = await this.userService.createUser(userDto)
+    async createUser(@Body() userDto: UserDto){
+        return await this.userService.createUser(userDto)
 
-            return response.status(HttpStatus.CREATED).json({
-                statusCode: 201,
-                message: 'User created successfully',
-                status: true,
-                data: user
-            })
-        } catch(err){
+        // try {
+        //     const user = await this.userService.createUser(userDto)
 
-            return response.status(HttpStatus.BAD_REQUEST).json({
-                statusCode: 400,
-                message: 'Error: User not created!',
-                status: false
-            })
-        } 
+        //     return response.status(HttpStatus.CREATED).json({
+        //         statusCode: 201,
+        //         message: 'User created successfully',
+        //         status: true,
+        //         data: user
+        //     })
+        // } catch(err){
+
+        //     return response.status(HttpStatus.BAD_REQUEST).json({
+        //         statusCode: 400,
+        //         message: 'Error: User not created!',
+        //         status: false
+        //     })
+        // } 
     }
 
     @Patch('/:id')
@@ -38,6 +40,21 @@ export class UserController {
     @Get()
     async getAllUsers(){
         return this.userService.getAllUsers()
+    }
+
+    @Get('username')
+    async getUserByName(@Query('name') name: string){        
+        return this.userService.getUsersByName(name)
+    }
+
+    @Get('sort-by-alphabet')
+    async sortUsersByAlphbeticalOrder(){
+        return this.userService.sortUsersByAlphbeticalOrder()
+    }
+
+    @Get('limit-users-data')
+    async limitUserData(@Query('limit') limit: string) {
+        return this.userService.limitUserData(Number(limit))
     }
 
     @Get('/:id')
