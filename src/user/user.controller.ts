@@ -66,4 +66,9 @@ export class UserController {
     async deleteUser(@Param('id') userId: string) {
         return this.userService.deleteUser(userId)
     }
+
+    @Get('user-projection')
+    async projectionOfUserData(){
+        return this.userService.projectionOfUserData()
+    }
 }

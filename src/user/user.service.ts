@@ -56,6 +56,10 @@ export class UserService {
     }
 
     async getUsersByName(name: string): Promise<User[]> {
+        //using in operator
+        // await this.userModel.find({'name': {$in:['kenneth', 'collins']}})
+        // query for sub fields
+        // await this.userModel.find({`adress.lat`: lat})
         const users  = await this.userModel.find({'name': name})
 
         if(!users){
@@ -83,5 +87,26 @@ export class UserService {
         }
 
         return users
+    }
+
+    async projectionOfUserData(): Promise<User>{
+        // projections in mongodb is when you return subset of data from a document
+        //_id to 0 means exclude the _id field.
+
+        const user = await this.userModel.findOne({}, {name: 1, roleNumber: 1, _id: 0})
+        if(!user){
+            throw new NotFoundException('No users in data.')
+        }
+
+        return user
+    }
+
+    async countUserDocuments(){
+        //you can also pass in query in the countDocument function
+        const count = await this.userModel.countDocuments()
+    }
+
+    async transactions(){
+        
     }
 }
