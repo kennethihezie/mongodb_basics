@@ -56,7 +56,7 @@ export class UserService {
     }
 
     async getUsersByName(name: string): Promise<User[]> {
-        //using in operator
+        // using in operator
         // await this.userModel.find({'name': {$in:['kenneth', 'collins']}})
         // query for sub fields
         // await this.userModel.find({`adress.lat`: lat})
