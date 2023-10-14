@@ -15,7 +15,6 @@ async function bootstrap() {
 
 bootstrap();
 
-// continue returning specific data from mongodb query
 
 // MongoDB relationship types for data modeling
 // one-to-one
