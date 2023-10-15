@@ -105,8 +105,4 @@ export class UserService {
         //you can also pass in query in the countDocument function
         const count = await this.userModel.countDocuments()
     }
-
-    async transactions(){
-        
-    }
 }
