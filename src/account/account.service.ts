@@ -18,17 +18,7 @@ export class AccountService {
         return this.accountModel.find().exec()
     }
 
-    async getByAccountId(accountId: string, amount?: number): Promise<Account>{
-        // if(amount){
-        //     const account = await this.accountModel.findOne({accountId: accountId}, {}, { balance: { $gte: ["$balance", amount] } })
-           
-        //     if(!account){
-        //        throw new NotFoundException('Insufficient funds on account')
-        //     }
-
-        //     return account
-        // }
-
+    async getByAccountId(accountId: string): Promise<Account>{
         const account = await this.accountModel.findOne({accountId: accountId})
 
             if(!account){
@@ -85,5 +75,69 @@ export class AccountService {
         } finally {
             await session.endSession()
         }
+    }
+
+    // Aggeration has four stages
+    /*
+    Finding
+    Sorting
+    Grouping
+    Projecting
+    */
+    async aggregation(): Promise<Account[]>{
+       const pipeline = [
+         /*
+         $match filters documents to pass only the documents that
+         match the specified conditions to the next stage of the pipeline
+
+         $lt is less than
+         */
+         { $match: { balance: { $lt: 1000} } },
+
+           { $group: {
+            // _id: "$account_type",
+            total_balance: { $sum: "$balance" },
+            avg_balance: { $avg: "$balance" }
+          }
+         }
+       ]
+
+       const acccounts = await this.accountModel.aggregate(pipeline)
+
+       if(!acccounts){
+        throw new NotFoundException("No accounts found with this agregate")
+       }
+
+       return acccounts
+    }
+
+    async anotherAggregation(): Promise<Account[]> {
+      const pipeline = [
+        // Stage 1: $match - filter the documents (checking, balance >= 1500)
+        { $match: { account_type: "checkings", balance: { $gte: 1500 } } },
+
+        // Stage 2: $sort - sorts the documents in descending order (balance)
+        { $sort: { balance: -1 } },
+
+      // Stage 3: $project - project only the requested fields and one computed field (account_type, account_id, balance, gbp_balance)
+        { 
+          $project: {
+          _id: 0,
+          account_id: 1,
+          account_type: 1,
+          balance: 1,
+          // GBP stands for Great British Pound
+          gbp_balance: { $divide: ["$balance", 1.3] }
+         }
+       }
+     ]
+
+     const acccounts = await this.accountModel.aggregate(pipeline)
+
+     if(!acccounts){
+      throw new NotFoundException("No accounts found with this agregate")
+     }
+
+     return acccounts
     }
 }

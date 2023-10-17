@@ -18,12 +18,17 @@ export class AccountController {
     }
 
     @Get('/:id')
-    async getAccountById(@Param('id') accountId: string,  @Query('amount') amount: number){          
-        return this.accountService.getByAccountId(accountId, amount)
+    async getAccountById(@Param('id') accountId: string){          
+        return this.accountService.getByAccountId(accountId)
     }
 
     @Post('/transfer')
     async transferMoney(@Body() transferDto: TransferDto) {  
         return this.accountService.transaction(transferDto)
+    }
+
+    @Get('/aggregate')
+    async aggregation(){
+        return this.accountService.aggregation()
     }
 }
