@@ -16,4 +16,8 @@ export class TransactionDto {
     @IsString()
     @IsNotEmpty()
     receiverAccountId: string
+
+    @IsString()
+    @IsNotEmpty()
+    transactionRef: string
 }

@@ -2,7 +2,8 @@ import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, Query, R
 import { UserDto } from './model/dto/user.dto';
 import { UserService } from './user.service';
 import { Response } from 'express';
-import { Serialize } from './interceptors/serialize.interceptor';
+import { Serialize } from '../interceptors/serialize.interceptor';
+import { UpdateUserDto } from './model/dto/update_user.dto';
 
 @Controller('user')
 @Serialize()
@@ -33,8 +34,8 @@ export class UserController {
     }
 
     @Patch('/:id')
-    async updateUser(@Param('id') userId: string, @Body() userDto: UserDto) {
-        return this.userService.updateUser(userId, userDto)
+    async updateUser(@Param('id') userId: string, @Body() updateUserDto: UpdateUserDto) {
+        return this.userService.updateUser(userId, updateUserDto)
     }
 
     @Get()
@@ -67,8 +68,18 @@ export class UserController {
         return this.userService.deleteUser(userId)
     }
 
+    @Delete()
+    async deleteAllUsers() {
+        return this.userService.deleteAllUsers()
+    }
+
     @Get('user-projection')
     async projectionOfUserData(){
         return this.userService.projectionOfUserData()
+    }
+
+    @Get('ount-doc')
+    async countDocument()  {
+        return await this.userService.countUserDocuments()
     }
 }

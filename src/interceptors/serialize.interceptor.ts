@@ -6,9 +6,7 @@ export function Serialize(){
 }
 
 export class SerializeInterceptor implements NestInterceptor {
-
     intercept(context: ExecutionContext, next: CallHandler<any>): Observable<any> | Promise<Observable<any>> {
-        
         return next.handle().pipe(
             map((data: any) => {
                 //run something before something is sent out

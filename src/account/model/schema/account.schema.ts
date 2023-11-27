@@ -3,7 +3,9 @@ import { HydratedDocument } from "mongoose";
 
 export type AccountDocument = HydratedDocument<Account>
 
-@Schema()
+@Schema({
+   timestamps: true
+})
 export class Account {
    @Prop()
    accountHolder: string

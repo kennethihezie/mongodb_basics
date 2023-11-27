@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/common';
 import { AccountService } from './account.service';
 import { AccountDto } from './model/dto/account.dto';
 import { TransferDto } from './model/dto/transfer.dto';
@@ -15,6 +15,16 @@ export class AccountController {
     @Get()
     async getAllAccounts(){
         return this.accountService.getAllAccounts()
+    }
+
+    @Delete()
+    async deleteAllAccount() {
+        return this.accountService.deleteAllAccounts()
+    }
+
+    @Delete('transactions')
+    async deleteAllTransactions() {
+        return await this.accountService.deleteAllTransactions()
     }
 
     @Get('/:id')

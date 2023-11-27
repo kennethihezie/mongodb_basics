@@ -3,7 +3,9 @@ import { HydratedDocument } from "mongoose";
 
 export type TransactionDocument = HydratedDocument<Transaction>
 
-@Schema()
+@Schema({
+   timestamps: true
+})
 export class Transaction{
    @Prop()
    transferId: string
@@ -16,6 +18,9 @@ export class Transaction{
 
    @Prop()
    receiverAccountId: string
+
+   @Prop()
+   transactionRef: string
 }
 
 export const TransactionSchema = SchemaFactory.createForClass(Transaction)

@@ -6,8 +6,8 @@ import { Account, AccountSchema } from './model/schema/account.schema';
 import { Transaction, TransactionSchema } from './model/schema/transaction.schema';
 
 @Module({
-  controllers: [AccountController],
-  providers: [AccountService],
+  controllers: [ AccountController ],
+  providers: [ AccountService ],
   imports: [MongooseModule.forFeature([{name: Account.name, schema: AccountSchema}, {name: Transaction.name, schema: TransactionSchema}])]
 })
 export class AccountModule {}

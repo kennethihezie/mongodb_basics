@@ -55,12 +55,16 @@ export class UserService {
         return user
     }
 
+    async deleteAllUsers() {
+        return await this.userModel.deleteMany()
+    }
+
     async getUsersByName(name: string): Promise<User[]> {
         // using in operator
-        // await this.userModel.find({'name': {$in:['kenneth', 'collins']}})
+        // await this.userModel.find({'name': { $in:['kenneth', 'collins'] } })
         // query for sub fields
         // await this.userModel.find({`adress.lat`: lat})
-        const users  = await this.userModel.find({'name': name})
+        const users  = await this.userModel.find({ 'name': name })
 
         if(!users){
            throw new NotFoundException('No user with the name')
@@ -72,7 +76,7 @@ export class UserService {
     async sortUsersByAlphbeticalOrder(): Promise<User[]> {
         // sorting users using the name property by alphabetical order
         // when sorting passing 1 means ascending and -1 means decending.
-        const users = await this.userModel.find().sort({name: 1})
+        const users = await this.userModel.find().sort({ name: 1 })
         if(!users){
             throw new NotFoundException('No users in data.')
         }
@@ -89,11 +93,11 @@ export class UserService {
         return users
     }
 
-    async projectionOfUserData(): Promise<User>{
+    async projectionOfUserData(): Promise<User[]>{
         // projections in mongodb is when you return subset of data from a document
         //_id to 0 means exclude the _id field.
+        const user = await this.userModel.find({}, { name: 1, roleNumber: 1, _id: 0 }).exec()
 
-        const user = await this.userModel.findOne({}, {name: 1, roleNumber: 1, _id: 0})
         if(!user){
             throw new NotFoundException('No users in data.')
         }
@@ -104,5 +108,19 @@ export class UserService {
     async countUserDocuments(){
         //you can also pass in query in the countDocument function
         const count = await this.userModel.countDocuments()
+
+        console.log(count);
     }
+
+    async mongoDbIndexes(){
+        /*
+        Indexes are special data structures that store small portion of the data, in an ordered form that is easy to search efficiently.
+        indexes point to document identity and allow to lookup and update data faster.
+ 
+        Types of indexes: 
+        Single field indexes: are indexes in one field only.
+        Compound field indexes: include more than one field in the index.
+        */
+       
+     }
 }
