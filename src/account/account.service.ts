@@ -94,7 +94,7 @@ export class AccountService {
     3: Grouping
     4: Projecting
     */
-    async aggregation(): Promise<Account[]>{
+    async basicAggregation(): Promise<Account[]> {      
        const pipeline = [
          /*
          $match filters documents to pass only the documents that
@@ -105,7 +105,6 @@ export class AccountService {
          { $match: { balance: { $lt: 1000} } },
 
            { $group: {
-            // _id: "$account_type",
             total_balance: { $sum: "$balance" },
             avg_balance: { $avg: "$balance" }
           }
@@ -121,12 +120,12 @@ export class AccountService {
        return acccounts
     }
 
-    async anotherAggregation(): Promise<Account[]> {
+    async advanceAggregation(): Promise<Account[]> {
       const pipeline = [
         // Stage 1: $match - filter the documents (checking, balance >= 1500)
-        { $match: { account_type: "checkings", balance: { $gte: 1500 } } },
+        { $match: { /*account_type: "checkings",*/ balance: { $gte: 500 } } },
         
-        // Stage 2: $sort - sorts the documents in descending order (balance)
+        // Stage 2: $sort -1 sorts the documents in descending order (balance)
         { $sort: { balance: -1 } },
   
         // Stage 3: $group the data
@@ -142,7 +141,7 @@ export class AccountService {
         $project: {
         _id: 0,
         account_id: 1,
-        account_type: 1,
+        accountHolder: 1,
         balance: 1,
         // GBP stands for Great British Pound
         gbp_balance: { $divide: ["$balance", 1.3] }

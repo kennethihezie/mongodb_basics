@@ -37,8 +37,13 @@ export class AccountController {
         return this.accountService.transaction(transferDto)
     }
 
-    @Get('/aggregate')
-    async aggregation(){
-        return this.accountService.aggregation()
+    @Get('/basic-aggregation')
+    async basicAggregation(){       
+       return this.accountService.basicAggregation()
+    }
+
+    @Get('/advance-aggregation')
+    async advanceAggregation(){
+        return this.accountService.advanceAggregation()
     }
 }
