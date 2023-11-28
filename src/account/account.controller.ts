@@ -2,7 +2,9 @@ import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/commo
 import { AccountService } from './account.service';
 import { AccountDto } from './model/dto/account.dto';
 import { TransferDto } from './model/dto/transfer.dto';
+import { Serialize } from 'src/interceptors/serialize.interceptor';
 
+@Serialize()
 @Controller('account')
 export class AccountController {
     constructor(private accountService: AccountService){}
