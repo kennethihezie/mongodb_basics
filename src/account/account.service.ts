@@ -123,7 +123,7 @@ export class AccountService {
     async advanceAggregation(): Promise<Account[]> {
       const pipeline = [
         // Stage 1: $match - filter the documents (checking, balance >= 1500)
-        { $match: { /*account_type: "checkings",*/ balance: { $gte: 500 } } },
+        { $match: { /*account_type: "checkings",*/ balance: { $gte: 500 } }},
         
         // Stage 2: $sort -1 sorts the documents in descending order (balance)
         { $sort: { balance: -1 } },
